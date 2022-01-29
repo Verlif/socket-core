@@ -14,16 +14,16 @@
     // 使用新的服务端配置新建服务端对象
     Server server=new Server(
             new ServerConfig()
-            // 设定服务端监听端口
-            .port(16508)
-            // 设定处理器数量与每个处理器管理的客户端连接数
-            .max(5).tied(5)
-            // 设定客户端消息处理器
-            .handler(handler));
-            // 服务端初始化
-            server.init();
-            // 服务端开始接受客户端连接请求
-            server.start();
+                // 设定服务端监听端口
+                .port(16508)
+                // 设定处理器数量与每个处理器管理的客户端连接数
+                .max(5).tied(5)
+                // 设定客户端消息处理器
+                .handler(handler));
+    // 服务端初始化
+    server.init();
+    // 服务端开始接受客户端连接请求
+    server.start();
 ```
 
 *注：handler在后面有说明*
@@ -33,18 +33,18 @@
 ```java
     Client client=new Client(
         new ClientConfig()
-        // 设定连接的服务端IP与端口
-        .ip("127.0.0.1").port(16508)
-        // 设定服务端消息处理器
-        .handler((client,message)->System.out.println(message)));
-        // 客户端连接
-        client.connect();
-        // 获取控制台输入监听
-        Scanner scanner=new Scanner(System.in);
-        while(client.isConnected()){
+            // 设定连接的服务端IP与端口
+            .ip("127.0.0.1").port(16508)
+            // 设定服务端消息处理器
+            .handler((client,message)->System.out.println(message)));
+    // 客户端连接
+    client.connect();
+    // 获取控制台输入监听
+    Scanner scanner=new Scanner(System.in);
+    while(client.isConnected()){
         // 将控制台输入发送给服务端
         client.sendMessage(scanner.nextLine());
-        }
+    }
 ```
 
 *注：handler在后面有说明*
