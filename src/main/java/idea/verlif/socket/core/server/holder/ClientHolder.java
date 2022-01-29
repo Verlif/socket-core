@@ -1,7 +1,7 @@
-package idea.verlif.socket.command.server.holder;
+package idea.verlif.socket.core.server.holder;
 
-import idea.verlif.socket.command.ReceiveHolder;
-import idea.verlif.socket.command.server.SocketHandler;
+import idea.verlif.socket.core.ReceiveHolder;
+import idea.verlif.socket.core.server.SocketHandler;
 
 import java.io.IOException;
 import java.io.PrintStream;

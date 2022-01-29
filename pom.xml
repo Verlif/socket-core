@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>idea.verlif</groupId>
-    <artifactId>socket-command</artifactId>
-    <version>alpha-0.1</version>
+    <artifactId>socket-core</artifactId>
+    <version>0.1</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

@@ -1,4 +1,4 @@
-package idea.verlif.socket.command;
+package idea.verlif.socket.core;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,4 +1,4 @@
-package idea.verlif.socket.command.client;
+package idea.verlif.socket.core.client;
 
 /**
  * @author Verlif

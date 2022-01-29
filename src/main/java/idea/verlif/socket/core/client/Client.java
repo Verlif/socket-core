@@ -1,6 +1,6 @@
-package idea.verlif.socket.command.client;
+package idea.verlif.socket.core.client;
 
-import idea.verlif.socket.command.ReceiveHolder;
+import idea.verlif.socket.core.ReceiveHolder;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -22,7 +22,7 @@ public class Client {
             new ArrayBlockingQueue<>(8),
             r -> {
                 Thread thread = new Thread(r);
-                thread.setDaemon(true);
+                thread.setDaemon(false);
                 return thread;
             });
 
