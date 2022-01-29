@@ -46,13 +46,17 @@ public class Client {
         EXECUTOR.execute(handler);
     }
 
+    public Socket getClient() {
+        return client;
+    }
+
     public void sendMessage(String message) {
         ps.println(message);
         ps.flush();
     }
 
     public boolean isConnected() {
-        return client.isConnected() && !client.isClosed();
+        return !client.isClosed();
     }
 
     public void close() {
