@@ -80,7 +80,7 @@
 >        <dependency>
 >            <groupId>com.github.Verlif</groupId>
 >            <artifactId>socket-core</artifactId>
->            <version>0.1</version>
+>            <version>0.2</version>
 >        </dependency>
 >    </dependencies>
 > ```
@@ -88,7 +88,7 @@
 > Gradle
 > ```text
 > dependencies {
->   implementation 'com.github.Verlif:socket-core:0.1'
+>   implementation 'com.github.Verlif:socket-core:0.2'
 > }
 > ```
 
