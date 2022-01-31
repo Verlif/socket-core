@@ -26,9 +26,9 @@ public class Client {
                 return thread;
             });
 
-    private final Socket client;
-    private final PrintStream ps;
-    private final ReceiveHolder handler;
+    protected final Socket client;
+    protected final PrintStream ps;
+    protected final ReceiveHolder handler;
 
     public Client(ClientConfig config) throws IOException {
         this.client = new Socket(config.getIp(), config.getPort());
@@ -67,5 +67,4 @@ public class Client {
         } catch (IOException ignored) {
         }
     }
-
 }

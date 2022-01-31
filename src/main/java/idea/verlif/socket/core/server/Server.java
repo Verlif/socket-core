@@ -15,8 +15,8 @@ import java.util.List;
  */
 public class Server {
 
-    private final ServerConfig config;
-    private ServerSocket server;
+    protected final ServerConfig config;
+    protected ServerSocket server;
 
     private final List<ClientHolder> holders;
 
@@ -52,5 +52,9 @@ public class Server {
                 config.getHandler().onRejected(socket);
             }
         }
+    }
+
+    public ServerConfig getConfig() {
+        return config;
     }
 }
