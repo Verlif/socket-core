@@ -12,14 +12,16 @@
 
 ```java
     // 使用新的服务端配置新建服务端对象
-    Server server=new Server(
+    Server server = new Server(
             new ServerConfig()
                 // 设定服务端监听端口
                 .port(16508)
                 // 设定处理器数量与每个处理器管理的客户端连接数
                 .max(5).tied(5)
                 // 设定客户端消息处理器
-                .handler(handler));
+                .handler(handler)
+                // 设定连接监听器
+                .listener(listener));
     // 服务端初始化
     server.init();
     // 服务端开始接受客户端连接请求
@@ -31,19 +33,24 @@
 ### Client
 
 ```java
-    Client client=new Client(
+    Client client = new Client(
         new ClientConfig()
             // 设定连接的服务端IP与端口
             .ip("127.0.0.1").port(16508)
             // 设定服务端消息处理器
-            .handler((client,message)->System.out.println(message)));
+            .handler((client,message) -> System.out.println(message))
+            // 设定连接监听器
+            .listener(listener));
     // 客户端连接
-    client.connect();
-    // 获取控制台输入监听
-    Scanner scanner=new Scanner(System.in);
-    while(client.isConnected()){
+    if (client.connect()) {
+        // 获取控制台输入监听
+        Scanner scanner = new Scanner(System.in);
+        while(client.isConnected()){
         // 将控制台输入发送给服务端
         client.sendMessage(scanner.nextLine());
+        }
+    } else {
+        System.out.println("fail!!!");
     }
 ```
 
@@ -80,7 +87,7 @@
 >        <dependency>
 >            <groupId>com.github.Verlif</groupId>
 >            <artifactId>socket-core</artifactId>
->            <version>0.2</version>
+>            <version>0.3</version>
 >        </dependency>
 >    </dependencies>
 > ```
@@ -88,13 +95,14 @@
 > Gradle
 > ```text
 > dependencies {
->   implementation 'com.github.Verlif:socket-core:0.2'
+>   implementation 'com.github.Verlif:socket-core:0.3'
 > }
 > ```
 
 ## 通讯信息处理
 
-本模块的信息是通过字符串的方式进行传递。 服务端使用`SocketHandler`接口进行客户端数据处理。 客户端使用`SocketHandler`接口进行服务端消息处理。 两端在新建对象时，其中的配置类中请添加自实现的消息处理接口。
+本模块的信息是通过字符串的方式进行传递。 服务端使用`SocketHandler`接口进行客户端数据处理。
+客户端使用`ReceiveHandler`接口进行服务端消息处理。 两端在新建对象时，其中的配置类中请添加自实现的消息处理接口。
 
 `SocketHandler`接口
 

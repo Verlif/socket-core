@@ -1,6 +1,6 @@
 package idea.verlif.socket.core.server.holder;
 
-import idea.verlif.socket.core.ReceiveHolder;
+import idea.verlif.socket.core.common.ReceiveHolder;
 import idea.verlif.socket.core.server.SocketHandler;
 
 import java.io.IOException;

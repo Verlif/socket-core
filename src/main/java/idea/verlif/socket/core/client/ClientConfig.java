@@ -1,5 +1,7 @@
 package idea.verlif.socket.core.client;
 
+import idea.verlif.socket.core.common.ConnectedListener;
+
 /**
  * @author Verlif
  * @version 1.0
@@ -33,8 +35,19 @@ public class ClientConfig {
     private ReceiveHandler receiveHandler = (client, message) -> {
     };
 
+    /**
+     * 连接监听
+     */
+    private ConnectedListener listener = socket -> {
+    };
+
     public ClientConfig handler(ReceiveHandler handler) {
         this.receiveHandler = handler;
+        return this;
+    }
+
+    public ClientConfig listener(ConnectedListener listener) {
+        this.listener = listener;
         return this;
     }
 
@@ -60,5 +73,13 @@ public class ClientConfig {
 
     public void setReceiveHandler(ReceiveHandler receiveHandler) {
         this.receiveHandler = receiveHandler;
+    }
+
+    public ConnectedListener getListener() {
+        return listener;
+    }
+
+    public void setListener(ConnectedListener listener) {
+        this.listener = listener;
     }
 }

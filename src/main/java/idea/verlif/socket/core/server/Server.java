@@ -1,5 +1,6 @@
 package idea.verlif.socket.core.server;
 
+import idea.verlif.socket.core.common.ConnectedListener;
 import idea.verlif.socket.core.server.holder.ClientHolder;
 
 import java.io.IOException;
@@ -17,12 +18,14 @@ public class Server {
 
     protected final ServerConfig config;
     protected ServerSocket server;
+    protected final ConnectedListener connectedListener;
 
-    private final List<ClientHolder> holders;
+    protected final List<ClientHolder> holders;
 
     public Server(ServerConfig config) {
         this.config = config;
         this.holders = new ArrayList<>();
+        this.connectedListener = config.getListener();
     }
 
     public void init() throws IOException {
@@ -44,6 +47,7 @@ public class Server {
             boolean add = false;
             for (ClientHolder holder : holders) {
                 if (holder.addClient(socket)) {
+                    connectedListener.onConnected(socket);
                     add = true;
                     break;
                 }
@@ -57,4 +61,5 @@ public class Server {
     public ServerConfig getConfig() {
         return config;
     }
+
 }
