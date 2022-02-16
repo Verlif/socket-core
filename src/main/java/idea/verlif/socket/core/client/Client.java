@@ -45,7 +45,6 @@ public class Client {
     public boolean connect() {
         try {
             this.client.connect(new InetSocketAddress(config.getIp(), config.getPort()));
-            config.getListener().onConnected(this.client);
             ps = new PrintStream(this.client.getOutputStream());
             handler = new ReceiveHolder(this.client.getInputStream()) {
                 @Override
@@ -54,6 +53,7 @@ public class Client {
                 }
             };
             EXECUTOR.execute(handler);
+            config.getListener().onConnected(this);
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -72,7 +72,7 @@ public class Client {
     }
 
     public boolean isConnected() {
-        return !client.isClosed();
+        return !client.isClosed() && client.isConnected();
     }
 
     public void close() {

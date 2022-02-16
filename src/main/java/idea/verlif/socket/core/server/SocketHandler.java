@@ -14,9 +14,18 @@ import java.net.Socket;
 public interface SocketHandler {
 
     /**
+     * 当客户端连接成功时回调
+     *
+     * @param handler 可用的客户端处理器
+     */
+    default void onClientConnected(ClientHolder.ClientHandler handler) {
+    }
+
+    /**
      * 当服务器连接数到达最大值时的拒绝策略
      *
      * @param socket 被拒绝的连接
+     * @throws IOException 当套接字被关闭时抛出异常
      */
     default void onRejected(Socket socket) throws IOException {
         PrintStream ps = new PrintStream(socket.getOutputStream());

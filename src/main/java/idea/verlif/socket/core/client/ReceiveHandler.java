@@ -10,7 +10,7 @@ public interface ReceiveHandler {
     /**
      * 当接收到数据时回调
      *
-     * @param client  客户端套接字
+     * @param client  客户端对象
      * @param message 接收到的数据
      */
     void receive(Client client, String message);

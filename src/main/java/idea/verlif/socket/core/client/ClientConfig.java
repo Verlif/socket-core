@@ -1,7 +1,5 @@
 package idea.verlif.socket.core.client;
 
-import idea.verlif.socket.core.common.ConnectedListener;
-
 /**
  * @author Verlif
  * @version 1.0

@@ -1,7 +1,5 @@
 package idea.verlif.socket.core.server;
 
-import idea.verlif.socket.core.common.ConnectedListener;
-
 /**
  * @author Verlif
  * @version 1.0
@@ -45,19 +43,8 @@ public class ServerConfig {
     private SocketHandler handler = (client, message) -> {
     };
 
-    /**
-     * 连接监听
-     */
-    private ConnectedListener listener = socket -> {
-    };
-
     public ServerConfig handler(SocketHandler handler) {
         this.handler = handler;
-        return this;
-    }
-
-    public ServerConfig listener(ConnectedListener listener) {
-        this.listener = listener;
         return this;
     }
 
@@ -74,7 +61,7 @@ public class ServerConfig {
     }
 
     public void setMax(int max) {
-        this.max = max;
+        this.max = Math.max(max, 1);
     }
 
     public int getTied() {
@@ -82,9 +69,7 @@ public class ServerConfig {
     }
 
     public void setTied(int tied) {
-        if (tied > 0) {
-            this.tied = tied;
-        }
+        this.tied = Math.max(tied, 1);
     }
 
     public SocketHandler getHandler() {
@@ -93,13 +78,5 @@ public class ServerConfig {
 
     public void setHandler(SocketHandler handler) {
         this.handler = handler;
-    }
-
-    public void setListener(ConnectedListener listener) {
-        this.listener = listener;
-    }
-
-    public ConnectedListener getListener() {
-        return listener;
     }
 }

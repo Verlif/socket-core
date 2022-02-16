@@ -18,10 +18,8 @@
                 .port(16508)
                 // 设定处理器数量与每个处理器管理的客户端连接数
                 .max(5).tied(5)
-                // 设定客户端消息处理器
-                .handler(handler)
-                // 设定连接监听器
-                .listener(listener));
+                // 设定客户端处理器
+                .handler(handler));
     // 服务端初始化
     server.init();
     // 服务端开始接受客户端连接请求
@@ -46,8 +44,8 @@
         // 获取控制台输入监听
         Scanner scanner = new Scanner(System.in);
         while(client.isConnected()){
-        // 将控制台输入发送给服务端
-        client.sendMessage(scanner.nextLine());
+            // 将控制台输入发送给服务端
+            client.sendMessage(scanner.nextLine());
         }
     } else {
         System.out.println("fail!!!");
@@ -87,7 +85,7 @@
 >        <dependency>
 >            <groupId>com.github.Verlif</groupId>
 >            <artifactId>socket-core</artifactId>
->            <version>0.3</version>
+>            <version>0.4</version>
 >        </dependency>
 >    </dependencies>
 > ```
@@ -95,7 +93,7 @@
 > Gradle
 > ```text
 > dependencies {
->   implementation 'com.github.Verlif:socket-core:0.3'
+>   implementation 'com.github.Verlif:socket-core:0.4'
 > }
 > ```
 
@@ -110,9 +108,18 @@
 public interface SocketHandler {
 
     /**
+     * 当客户端连接成功时回调
+     *
+     * @param handler 可用的客户端处理器
+     */
+    default void onClientConnected(ClientHolder.ClientHandler handler) {
+    }
+
+    /**
      * 当服务器连接数到达最大值时的拒绝策略
      *
      * @param socket 被拒绝的连接
+     * @throws IOException 当套接字被关闭时抛出异常
      */
     default void onRejected(Socket socket) throws IOException {
         PrintStream ps = new PrintStream(socket.getOutputStream());
@@ -142,7 +149,7 @@ public interface ReceiveHandler {
     /**
      * 当接收到数据时回调
      *
-     * @param client  客户端套接字
+     * @param client  客户端对象
      * @param message 接收到的数据
      */
     void receive(Client client, String message);

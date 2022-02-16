@@ -42,19 +42,24 @@ public class ClientHolder {
                 new ArrayBlockingQueue<>(8), (ThreadFactory) Thread::new);
     }
 
-    public synchronized boolean addClient(Socket client) {
+    public synchronized ClientHandler addClient(Socket client) {
         recycle();
         if (clientList.size() >= max) {
-            return false;
+            return null;
         }
+        ClientHandler handler = null;
         try {
-            ClientHandler handler = new ClientHandler(client, this.handler);
+            handler = new ClientHandler(client, this.handler);
             clientList.add(handler);
             executor.execute(handler);
-            return true;
+            return handler;
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
+            try {
+                client.close();
+            } catch (IOException ignored) {
+            }
+            return null;
         }
     }
 
@@ -68,6 +73,12 @@ public class ClientHolder {
             if (handler.getClient() == null || handler.getClient().isClosed()) {
                 clientList.remove(handler);
             }
+        }
+    }
+
+    public void stop() throws IOException {
+        for (ClientHandler handler : clientList) {
+            handler.close();
         }
     }
 
