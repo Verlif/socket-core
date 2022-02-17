@@ -35,7 +35,7 @@ public class Server {
         synchronized (holders) {
             holders.clear();
             for (int i = 0; i < config.getMax(); i++) {
-                ClientHolder holder = new ClientHolder(config.getHandler(), config.getTied());
+                ClientHolder holder = new ClientHolder(config);
                 holders.add(holder);
             }
         }
@@ -52,7 +52,7 @@ public class Server {
             for (ClientHolder holder : holders) {
                 ClientHolder.ClientHandler handler = holder.addClient(socket);
                 if (handler != null) {
-                    config.getHandler().onClientConnected(handler);
+                    config.getConnectedListener().onClientConnected(handler);
                     add = true;
                     break;
                 }

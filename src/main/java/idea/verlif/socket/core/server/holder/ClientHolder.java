@@ -1,7 +1,9 @@
 package idea.verlif.socket.core.server.holder;
 
 import idea.verlif.socket.core.common.ReceiveHolder;
+import idea.verlif.socket.core.server.ServerConfig;
 import idea.verlif.socket.core.server.SocketHandler;
+import idea.verlif.socket.core.server.listener.ClosedListener;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -30,11 +32,13 @@ public class ClientHolder {
     private final int max;
     private final List<ClientHandler> clientList;
     private final SocketHandler handler;
+    private final ClosedListener closedListener;
 
-    public ClientHolder(SocketHandler handler, int max) {
+    public ClientHolder(ServerConfig config) {
         this.clientList = new ArrayList<>();
-        this.handler = handler;
-        this.max = max;
+        this.handler = config.getHandler();
+        this.max = config.getMax();
+        this.closedListener = config.getClosedListener();
 
         executor = new ThreadPoolExecutor(
                 max / 2, max,
@@ -47,9 +51,9 @@ public class ClientHolder {
         if (clientList.size() >= max) {
             return null;
         }
-        ClientHandler handler = null;
+        ClientHandler handler;
         try {
-            handler = new ClientHandler(client, this.handler);
+            handler = new ClientHandler(client, this.handler, this.closedListener);
             clientList.add(handler);
             executor.execute(handler);
             return handler;
@@ -88,11 +92,17 @@ public class ClientHolder {
         private final PrintStream ps;
         private final ReceiveHolder receive;
 
-        public ClientHandler(Socket client, SocketHandler handler) throws IOException {
+        public ClientHandler(Socket client, SocketHandler handler, ClosedListener listener) throws IOException {
             this.client = client;
 
             ps = new PrintStream(client.getOutputStream());
-            receive = new ReceiveHolder(client.getInputStream()) {
+            receive = new ReceiveHolder(client) {
+
+                @Override
+                public void onClosed(Socket socket) {
+                    listener.onClientClosed(socket);
+                }
+
                 @Override
                 public void receive(String message) {
                     handler.receive(ClientHandler.this, message);

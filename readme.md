@@ -85,7 +85,7 @@
 >        <dependency>
 >            <groupId>com.github.Verlif</groupId>
 >            <artifactId>socket-core</artifactId>
->            <version>0.4</version>
+>            <version>0.5</version>
 >        </dependency>
 >    </dependencies>
 > ```
@@ -93,7 +93,7 @@
 > Gradle
 > ```text
 > dependencies {
->   implementation 'com.github.Verlif:socket-core:0.4'
+>   implementation 'com.github.Verlif:socket-core:0.5'
 > }
 > ```
 
@@ -113,6 +113,14 @@ public interface SocketHandler {
      * @param handler 可用的客户端处理器
      */
     default void onClientConnected(ClientHolder.ClientHandler handler) {
+    }
+    
+    /**
+     * 当客户端连接断开时回调
+     *
+     * @param socket 断开的socket
+     */
+    default void onClientClosed(Socket socket) {
     }
 
     /**
@@ -153,5 +161,11 @@ public interface ReceiveHandler {
      * @param message 接收到的数据
      */
     void receive(Client client, String message);
+
+    /**
+     * 当连接断开是回调
+     */
+    default void onClosed() {}
+
 }
 ```

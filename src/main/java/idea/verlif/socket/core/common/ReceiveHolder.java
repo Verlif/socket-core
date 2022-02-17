@@ -1,7 +1,7 @@
 package idea.verlif.socket.core.common;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.net.Socket;
 import java.util.Scanner;
 
 /**
@@ -11,19 +11,19 @@ import java.util.Scanner;
  */
 public abstract class ReceiveHolder implements Runnable {
 
-    private final InputStream stream;
+    private final Socket socket;
     private boolean available;
 
-    public ReceiveHolder(InputStream stream) {
-        this.stream = stream;
+    public ReceiveHolder(Socket socket) {
+        this.socket = socket;
         this.available = true;
     }
 
     @Override
     public void run() {
-        Scanner scanner = new Scanner(stream);
         try {
-            while (available) {
+            Scanner scanner = new Scanner(socket.getInputStream());
+            while (available && !socket.isClosed()) {
                 receive(scanner.nextLine());
             }
         } catch (Exception ig) {
@@ -32,11 +32,21 @@ public abstract class ReceiveHolder implements Runnable {
             } catch (IOException ignored) {
             }
         }
+        onClosed(socket);
     }
 
     public void close() throws IOException {
         available = false;
-        stream.close();
+        socket.close();
+    }
+
+    /**
+     * 当连接关闭时回调
+     *
+     * @param socket 被关闭的socket
+     */
+    public void onClosed(Socket socket) {
+
     }
 
     /**

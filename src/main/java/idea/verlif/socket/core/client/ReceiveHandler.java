@@ -1,6 +1,8 @@
 package idea.verlif.socket.core.client;
 
 /**
+ * 接收服务端消息接口
+ *
  * @author Verlif
  * @version 1.0
  * @date 2022/1/28 13:57

@@ -1,7 +1,9 @@
-package idea.verlif.socket.core.client;
+package idea.verlif.socket.core.client.listener;
+
+import idea.verlif.socket.core.client.Client;
 
 /**
- * 当Socket连接上时回调
+ * 当Socket连接上时回调接口
  *
  * @author Verlif
  */
@@ -13,4 +15,5 @@ public interface ConnectedListener {
      * @param client 连接的客户端对象
      */
     void onConnected(Client client);
+
 }

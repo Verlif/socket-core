@@ -46,14 +46,20 @@ public class Client {
         try {
             this.client.connect(new InetSocketAddress(config.getIp(), config.getPort()));
             ps = new PrintStream(this.client.getOutputStream());
-            handler = new ReceiveHolder(this.client.getInputStream()) {
+            handler = new ReceiveHolder(this.client) {
+
+                @Override
+                public void onClosed(Socket socket) {
+                    config.getClosedListener().onClosed();
+                }
+
                 @Override
                 public void receive(String message) {
                     config.getReceiveHandler().receive(Client.this, message);
                 }
             };
             EXECUTOR.execute(handler);
-            config.getListener().onConnected(this);
+            config.getConnectedListener().onConnected(this);
             return true;
         } catch (IOException e) {
             e.printStackTrace();

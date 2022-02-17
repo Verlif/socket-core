@@ -1,5 +1,8 @@
 package idea.verlif.socket.core.server;
 
+import idea.verlif.socket.core.server.listener.ClosedListener;
+import idea.verlif.socket.core.server.listener.ConnectedListener;
+
 /**
  * @author Verlif
  * @version 1.0
@@ -10,7 +13,7 @@ public class ServerConfig {
     /**
      * 套接字端口
      */
-    private int port = 16508;
+    protected int port = 16508;
 
     public ServerConfig port(int port) {
         this.port = port;
@@ -20,7 +23,7 @@ public class ServerConfig {
     /**
      * 最大处理器数量
      */
-    private int max = 2;
+    protected int max = 2;
 
     public ServerConfig max(int max) {
         this.max = max;
@@ -30,7 +33,7 @@ public class ServerConfig {
     /**
      * 多少个连接共用一个处理器
      */
-    private int tied = 1;
+    protected int tied = 1;
 
     public ServerConfig tied(int tied) {
         this.tied = tied;
@@ -43,8 +46,28 @@ public class ServerConfig {
     private SocketHandler handler = (client, message) -> {
     };
 
+    /**
+     * @see ConnectedListener
+     */
+    private ConnectedListener connectedListener = handler1 -> {};
+
+    /**
+     * @see ClosedListener
+     */
+    private ClosedListener closedListener = socket -> {};
+
     public ServerConfig handler(SocketHandler handler) {
         this.handler = handler;
+        return this;
+    }
+
+    public ServerConfig connectListener(ConnectedListener listener) {
+        this.connectedListener = listener;
+        return this;
+    }
+
+    public ServerConfig closedListener(ClosedListener listener) {
+        this.closedListener = listener;
         return this;
     }
 
@@ -78,5 +101,21 @@ public class ServerConfig {
 
     public void setHandler(SocketHandler handler) {
         this.handler = handler;
+    }
+
+    public ConnectedListener getConnectedListener() {
+        return connectedListener;
+    }
+
+    public void setConnectedListener(ConnectedListener connectedListener) {
+        this.connectedListener = connectedListener;
+    }
+
+    public ClosedListener getClosedListener() {
+        return closedListener;
+    }
+
+    public void setClosedListener(ClosedListener closedListener) {
+        this.closedListener = closedListener;
     }
 }

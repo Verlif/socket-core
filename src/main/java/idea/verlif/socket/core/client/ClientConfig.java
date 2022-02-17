@@ -1,5 +1,8 @@
 package idea.verlif.socket.core.client;
 
+import idea.verlif.socket.core.client.listener.ClosedListener;
+import idea.verlif.socket.core.client.listener.ConnectedListener;
+
 /**
  * @author Verlif
  * @version 1.0
@@ -36,16 +39,26 @@ public class ClientConfig {
     /**
      * 连接监听
      */
-    private ConnectedListener listener = socket -> {
+    private ConnectedListener connectedListener = socket -> {
     };
+
+    /**
+     * 连接断开监听
+     */
+    private ClosedListener closedListener = () -> {};
 
     public ClientConfig handler(ReceiveHandler handler) {
         this.receiveHandler = handler;
         return this;
     }
 
-    public ClientConfig listener(ConnectedListener listener) {
-        this.listener = listener;
+    public ClientConfig connectedListener(ConnectedListener listener) {
+        this.connectedListener = listener;
+        return this;
+    }
+
+    public ClientConfig closedListener(ClosedListener listener) {
+        this.closedListener = listener;
         return this;
     }
 
@@ -73,11 +86,19 @@ public class ClientConfig {
         this.receiveHandler = receiveHandler;
     }
 
-    public ConnectedListener getListener() {
-        return listener;
+    public ConnectedListener getConnectedListener() {
+        return connectedListener;
     }
 
-    public void setListener(ConnectedListener listener) {
-        this.listener = listener;
+    public void setConnectedListener(ConnectedListener connectedListener) {
+        this.connectedListener = connectedListener;
+    }
+
+    public ClosedListener getClosedListener() {
+        return closedListener;
+    }
+
+    public void setClosedListener(ClosedListener closedListener) {
+        this.closedListener = closedListener;
     }
 }
