@@ -108,22 +108,6 @@
 public interface SocketHandler {
 
     /**
-     * 当客户端连接成功时回调
-     *
-     * @param handler 可用的客户端处理器
-     */
-    default void onClientConnected(ClientHolder.ClientHandler handler) {
-    }
-    
-    /**
-     * 当客户端连接断开时回调
-     *
-     * @param socket 断开的socket
-     */
-    default void onClientClosed(Socket socket) {
-    }
-
-    /**
      * 当服务器连接数到达最大值时的拒绝策略
      *
      * @param socket 被拒绝的连接
@@ -161,11 +145,6 @@ public interface ReceiveHandler {
      * @param message 接收到的数据
      */
     void receive(Client client, String message);
-
-    /**
-     * 当连接断开是回调
-     */
-    default void onClosed() {}
 
 }
 ```
