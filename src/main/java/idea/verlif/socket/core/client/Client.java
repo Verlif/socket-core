@@ -19,11 +19,11 @@ public class Client {
 
     public static final ThreadPoolExecutor EXECUTOR = new ThreadPoolExecutor(
             1, 2,
-            1, TimeUnit.SECONDS,
+            0, TimeUnit.SECONDS,
             new ArrayBlockingQueue<>(8),
             r -> {
                 Thread thread = new Thread(r);
-                thread.setDaemon(false);
+                thread.setDaemon(true);
                 return thread;
             });
 
