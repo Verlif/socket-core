@@ -41,7 +41,7 @@ public class ClientHolder {
         this.closedListener = config.getClosedListener();
 
         executor = new ThreadPoolExecutor(
-                max / 2, max,
+                (max / 2) + 1, max,
                 60, TimeUnit.SECONDS,
                 new ArrayBlockingQueue<>(8), (ThreadFactory) Thread::new);
     }
