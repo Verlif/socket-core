@@ -1,5 +1,10 @@
 package idea.verlif.socket.core.client;
 
+import idea.verlif.socket.core.client.impl.DefaultClosedListener;
+import idea.verlif.socket.core.client.impl.DefaultConnectedListener;
+import idea.verlif.socket.core.client.impl.DefaultReceiveHandler;
+import idea.verlif.socket.core.client.listener.ClosedListener;
+import idea.verlif.socket.core.client.listener.ConnectedListener;
 import idea.verlif.socket.core.common.ReceiveHolder;
 
 import java.io.IOException;
@@ -32,6 +37,21 @@ public class Client {
     protected PrintStream ps;
     protected ReceiveHolder handler;
 
+    /**
+     * 信息处理接口
+     */
+    private ReceiveHandler receiveHandler;
+
+    /**
+     * 连接监听
+     */
+    private ConnectedListener connectedListener;
+
+    /**
+     * 连接断开监听
+     */
+    private ClosedListener closedListener;
+
     public Client(ClientConfig config) {
         this.client = new Socket();
         this.config = config;
@@ -43,23 +63,31 @@ public class Client {
      * @return 是否连接成功
      */
     public boolean connect() {
+        if (receiveHandler == null) {
+            receiveHandler = new DefaultReceiveHandler();
+        }
+        if (connectedListener == null) {
+            connectedListener = new DefaultConnectedListener();
+        }
+        if (closedListener == null) {
+            closedListener = new DefaultClosedListener();
+        }
         try {
             this.client.connect(new InetSocketAddress(config.getIp(), config.getPort()));
             ps = new PrintStream(this.client.getOutputStream());
             handler = new ReceiveHolder(this.client) {
-
                 @Override
                 public void onClosed(Socket socket) {
-                    config.getClosedListener().onClosed();
+                    closedListener.onClosed();
                 }
 
                 @Override
                 public void receive(String message) {
-                    config.getReceiveHandler().receive(Client.this, message);
+                    receiveHandler.receive(Client.this, message);
                 }
             };
             EXECUTOR.execute(handler);
-            config.getConnectedListener().onConnected(this);
+            connectedListener.onConnected(this);
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -73,7 +101,7 @@ public class Client {
     }
 
     public void sendMessage(String message) {
-        ps.println(message);
+        ps.print(message);
         ps.flush();
     }
 
@@ -92,5 +120,17 @@ public class Client {
             }
         } catch (IOException ignored) {
         }
+    }
+
+    public void setReceiveHandler(ReceiveHandler receiveHandler) {
+        this.receiveHandler = receiveHandler;
+    }
+
+    public void setConnectedListener(ConnectedListener connectedListener) {
+        this.connectedListener = connectedListener;
+    }
+
+    public void setClosedListener(ClosedListener closedListener) {
+        this.closedListener = closedListener;
     }
 }

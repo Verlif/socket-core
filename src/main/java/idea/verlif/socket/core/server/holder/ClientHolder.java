@@ -34,11 +34,11 @@ public class ClientHolder {
     private final SocketHandler handler;
     private final ClosedListener closedListener;
 
-    public ClientHolder(ServerConfig config) {
+    public ClientHolder(ServerConfig config, SocketHandler handler, ClosedListener closedListener) {
         this.clientList = new ArrayList<>();
-        this.handler = config.getHandler();
+        this.handler = handler;
         this.max = config.getMax();
-        this.closedListener = config.getClosedListener();
+        this.closedListener = closedListener;
 
         executor = new ThreadPoolExecutor(
                 (max / 2) + 1, max,
@@ -111,7 +111,7 @@ public class ClientHolder {
         }
 
         public void sendMessage(String message) {
-            ps.println(message);
+            ps.print(message);
             ps.flush();
         }
 

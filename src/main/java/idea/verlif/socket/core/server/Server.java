@@ -1,6 +1,11 @@
 package idea.verlif.socket.core.server;
 
 import idea.verlif.socket.core.server.holder.ClientHolder;
+import idea.verlif.socket.core.server.impl.DefaultClosedListener;
+import idea.verlif.socket.core.server.impl.DefaultConnectedListener;
+import idea.verlif.socket.core.server.impl.DefaultSocketHandler;
+import idea.verlif.socket.core.server.listener.ClosedListener;
+import idea.verlif.socket.core.server.listener.ConnectedListener;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -18,6 +23,21 @@ public class Server {
     protected final ServerConfig config;
     protected ServerSocket server;
 
+    /**
+     * @see SocketHandler
+     */
+    private SocketHandler handler;
+
+    /**
+     * @see ConnectedListener
+     */
+    private ConnectedListener connectedListener;
+
+    /**
+     * @see ClosedListener
+     */
+    private ClosedListener closedListener;
+
     protected final List<ClientHolder> holders;
 
     public Server(ServerConfig config) {
@@ -32,10 +52,19 @@ public class Server {
      * @throws IOException 当服务器端口被占用或是
      */
     public void init() throws IOException {
+        if (handler == null) {
+            handler = new DefaultSocketHandler();
+        }
+        if (connectedListener == null) {
+            connectedListener = new DefaultConnectedListener();
+        }
+        if (closedListener == null) {
+            closedListener = new DefaultClosedListener();
+        }
         synchronized (holders) {
             holders.clear();
             for (int i = 0; i < config.getMax(); i++) {
-                ClientHolder holder = new ClientHolder(config);
+                ClientHolder holder = new ClientHolder(config, handler, closedListener);
                 holders.add(holder);
             }
         }
@@ -52,13 +81,13 @@ public class Server {
             for (ClientHolder holder : holders) {
                 ClientHolder.ClientHandler handler = holder.addClient(socket);
                 if (handler != null) {
-                    config.getConnectedListener().onClientConnected(handler);
+                    connectedListener.onClientConnected(handler);
                     add = true;
                     break;
                 }
             }
             if (!add) {
-                config.getHandler().onRejected(socket);
+                handler.onRejected(socket);
             }
         }
     }
@@ -71,4 +100,15 @@ public class Server {
         return config;
     }
 
+    public void setHandler(SocketHandler handler) {
+        this.handler = handler;
+    }
+
+    public void setConnectedListener(ConnectedListener connectedListener) {
+        this.connectedListener = connectedListener;
+    }
+
+    public void setClosedListener(ClosedListener closedListener) {
+        this.closedListener = closedListener;
+    }
 }

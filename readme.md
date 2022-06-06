@@ -17,9 +17,20 @@
                 // 设定服务端监听端口
                 .port(16508)
                 // 设定处理器数量与每个处理器管理的客户端连接数
-                .max(5).tied(5)
-                // 设定客户端处理器
-                .handler(handler));
+                .max(5).tied(5));
+    server.setHandler((client, message) -> {
+        if (message.equalsIgnoreCase("close")) {
+            try {
+                client.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (message.equalsIgnoreCase("close me")) {
+            client.sendMessage("close\n");
+        } else {
+            System.out.println(message);
+        }
+    });
     // 服务端初始化
     server.init();
     // 服务端开始接受客户端连接请求
@@ -31,21 +42,21 @@
 ### Client
 
 ```java
-    Client client = new Client(
-        new ClientConfig()
-            // 设定连接的服务端IP与端口
-            .ip("127.0.0.1").port(16508)
-            // 设定服务端消息处理器
-            .handler((client,message) -> System.out.println(message))
-            // 设定连接监听器
-            .listener(listener));
+    Client client = new Client(new ClientConfig());
+    client.setReceiveHandler((client1, message) -> {
+        if (message.equalsIgnoreCase("close")) {
+            client1.close();
+        } else {
+            System.out.println(message);
+        }
+    });
     // 客户端连接
     if (client.connect()) {
         // 获取控制台输入监听
         Scanner scanner = new Scanner(System.in);
         while(client.isConnected()){
             // 将控制台输入发送给服务端
-            client.sendMessage(scanner.nextLine());
+            client.sendMessage(scanner.nextLine() + "\n");
         }
     } else {
         System.out.println("fail!!!");
@@ -56,46 +67,54 @@
 
 ## 添加
 
-1. 添加Jitpack仓库源
+### 添加Jitpack仓库源
 
-> maven
-> ```xml
-> <repositories>
->    <repository>
->        <id>jitpack.io</id>
->        <url>https://jitpack.io</url>
->    </repository>
-> </repositories>
-> ```
+[![Release](https://jitpack.io/v/Verlif/socket-core.svg)](https://jitpack.io/#Verlif/socket-core)
 
-> Gradle
-> ```text
-> allprojects {
->   repositories {
->       maven { url 'https://jitpack.io' }
->   }
-> }
-> ```
+#### maven
 
-2. 添加依赖
+```xml
+<repositories>
+   <repository>
+       <id>jitpack.io</id>
+       <url>https://jitpack.io</url>
+   </repository>
+</repositories>
+```
 
-> maven
-> ```xml
->    <dependencies>
->        <dependency>
->            <groupId>com.github.Verlif</groupId>
->            <artifactId>socket-core</artifactId>
->            <version>0.5.2</version>
->        </dependency>
->    </dependencies>
-> ```
+#### Gradle
 
-> Gradle
-> ```text
-> dependencies {
->   implementation 'com.github.Verlif:socket-core:0.5.2'
-> }
-> ```
+```text
+allprojects {
+  repositories {
+      maven { url 'https://jitpack.io' }
+  }
+}
+```
+
+### 添加依赖
+
+#### maven
+
+```xml
+<dependencies>
+    <dependency>
+        <groupId>com.github.Verlif</groupId>
+        <artifactId>socket-core</artifactId>
+        <version>last-version</version>
+    </dependency>
+</dependencies>
+```
+
+#### Gradle
+
+```text
+dependencies {
+  implementation 'com.github.Verlif:socket-core:last-version'
+}
+```
+
+------
 
 ## 通讯信息处理
 

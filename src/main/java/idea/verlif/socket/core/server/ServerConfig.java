@@ -1,8 +1,5 @@
 package idea.verlif.socket.core.server;
 
-import idea.verlif.socket.core.server.listener.ClosedListener;
-import idea.verlif.socket.core.server.listener.ConnectedListener;
-
 /**
  * @author Verlif
  * @version 1.0
@@ -40,37 +37,6 @@ public class ServerConfig {
         return this;
     }
 
-    /**
-     * @see SocketHandler
-     */
-    private SocketHandler handler = (client, message) -> {
-    };
-
-    /**
-     * @see ConnectedListener
-     */
-    private ConnectedListener connectedListener = handler1 -> {};
-
-    /**
-     * @see ClosedListener
-     */
-    private ClosedListener closedListener = socket -> {};
-
-    public ServerConfig handler(SocketHandler handler) {
-        this.handler = handler;
-        return this;
-    }
-
-    public ServerConfig connectListener(ConnectedListener listener) {
-        this.connectedListener = listener;
-        return this;
-    }
-
-    public ServerConfig closedListener(ClosedListener listener) {
-        this.closedListener = listener;
-        return this;
-    }
-
     public int getPort() {
         return port;
     }
@@ -95,27 +61,4 @@ public class ServerConfig {
         this.tied = Math.max(tied, 1);
     }
 
-    public SocketHandler getHandler() {
-        return handler;
-    }
-
-    public void setHandler(SocketHandler handler) {
-        this.handler = handler;
-    }
-
-    public ConnectedListener getConnectedListener() {
-        return connectedListener;
-    }
-
-    public void setConnectedListener(ConnectedListener connectedListener) {
-        this.connectedListener = connectedListener;
-    }
-
-    public ClosedListener getClosedListener() {
-        return closedListener;
-    }
-
-    public void setClosedListener(ClosedListener closedListener) {
-        this.closedListener = closedListener;
-    }
 }
