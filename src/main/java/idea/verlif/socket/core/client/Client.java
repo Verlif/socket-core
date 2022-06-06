@@ -101,7 +101,12 @@ public class Client {
     }
 
     public void sendMessage(String message) {
-        ps.print(message);
+        ps.println(message);
+        ps.flush();
+    }
+
+    public void sendString(String str) {
+        ps.print(str);
         ps.flush();
     }
 
