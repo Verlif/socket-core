@@ -40,17 +40,17 @@ public class Client {
     /**
      * 信息处理接口
      */
-    private ReceiveHandler receiveHandler;
+    protected ReceiveHandler receiveHandler;
 
     /**
      * 连接监听
      */
-    private ConnectedListener connectedListener;
+    protected ConnectedListener connectedListener;
 
     /**
      * 连接断开监听
      */
-    private ClosedListener closedListener;
+    protected ClosedListener closedListener;
 
     public Client(ClientConfig config) {
         this.client = new Socket();

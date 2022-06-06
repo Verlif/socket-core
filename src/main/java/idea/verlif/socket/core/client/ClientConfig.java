@@ -10,7 +10,7 @@ public class ClientConfig {
     /**
      * 服务端IP地址
      */
-    private String ip = "127.0.0.1";
+    protected String ip = "127.0.0.1";
 
     public ClientConfig ip(String ip) {
         this.ip = ip;
@@ -20,7 +20,7 @@ public class ClientConfig {
     /**
      * 服务端端口
      */
-    private int port = 16508;
+    protected int port = 16508;
 
     public ClientConfig port(int port) {
         this.port = port;

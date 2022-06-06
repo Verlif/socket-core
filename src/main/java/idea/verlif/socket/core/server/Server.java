@@ -26,17 +26,17 @@ public class Server {
     /**
      * @see SocketHandler
      */
-    private SocketHandler handler;
+    protected SocketHandler handler;
 
     /**
      * @see ConnectedListener
      */
-    private ConnectedListener connectedListener;
+    protected ConnectedListener connectedListener;
 
     /**
      * @see ClosedListener
      */
-    private ClosedListener closedListener;
+    protected ClosedListener closedListener;
 
     protected final List<ClientHolder> holders;
 

@@ -24,15 +24,15 @@ import java.util.concurrent.TimeUnit;
  */
 public class ClientHolder {
 
-    private final ThreadPoolExecutor executor;
+    protected final ThreadPoolExecutor executor;
 
     /**
      * 当前管理器可容纳的客户连接最大值。
      */
-    private final int max;
-    private final List<ClientHandler> clientList;
-    private final SocketHandler handler;
-    private final ClosedListener closedListener;
+    protected final int max;
+    protected final List<ClientHandler> clientList;
+    protected final SocketHandler handler;
+    protected final ClosedListener closedListener;
 
     public ClientHolder(ServerConfig config, SocketHandler handler, ClosedListener closedListener) {
         this.clientList = new ArrayList<>();
@@ -86,7 +86,7 @@ public class ClientHolder {
         }
     }
 
-    public static class ClientHandler implements Runnable {
+    public static final class ClientHandler implements Runnable {
 
         private final Socket client;
         private final PrintStream ps;

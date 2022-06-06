@@ -11,8 +11,8 @@ import java.util.Scanner;
  */
 public abstract class ReceiveHolder implements Runnable {
 
-    private final Socket socket;
-    private boolean available;
+    protected final Socket socket;
+    protected boolean available;
 
     public ReceiveHolder(Socket socket) {
         this.socket = socket;
