@@ -1,5 +1,9 @@
 # SocketCore
 
+**已被 [socket-point](https://github.com/Verlif/socket-point) 代替，推荐使用 socket-point**
+**已被 [socket-point](https://github.com/Verlif/socket-point) 代替，推荐使用 socket-point**
+**已被 [socket-point](https://github.com/Verlif/socket-point) 代替，推荐使用 socket-point**
+
 基于Socket的简单服务端与客户端通讯模块  
 核心：
 
